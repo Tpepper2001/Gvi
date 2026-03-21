@@ -1,489 +1,1065 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>George Waris | Video Editor & Motion Designer</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --black: #080808;
-            --offwhite: #F2EDE8;
-            --accent: #E85D26;
-            --accent2: #C94B1A;
-            --muted: #6B6560;
-            --card-bg: #111110;
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
-        body { background: var(--black); color: var(--offwhite); font-family: 'DM Sans', sans-serif; overflow-x: hidden; cursor: none; }
-        .cursor { width: 12px; height: 12px; background: var(--accent); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999; transition: transform 0.15s ease; }
-        .cursor-ring { width: 38px; height: 38px; border: 1.5px solid rgba(232,93,38,0.5); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9998; transition: border-color 0.3s; }
-        body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E"); opacity: 0.03; pointer-events: none; z-index: 9997; }
-        nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 28px 48px; background: linear-gradient(to bottom, rgba(8,8,8,0.95) 0%, transparent 100%); }
-        .nav-logo { font-family: 'DM Serif Display', serif; font-size: 1.25rem; letter-spacing: -0.02em; color: var(--offwhite); text-decoration: none; }
-        .nav-logo span { color: var(--accent); font-style: italic; }
-        .nav-links { display: flex; gap: 40px; list-style: none; }
-        .nav-links a { font-family: 'Space Mono', monospace; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); text-decoration: none; transition: color 0.2s; }
-        .nav-links a:hover { color: var(--offwhite); }
-        .nav-cta { font-family: 'Space Mono', monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--black); background: var(--accent); border: none; padding: 12px 24px; text-decoration: none; transition: background 0.2s, transform 0.2s; cursor: none; }
-        .nav-cta:hover { background: var(--accent2); transform: translateY(-1px); }
-        .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: flex-end; padding: 0 48px 80px; position: relative; overflow: hidden; }
-        .hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse at 20% 80%, rgba(232,93,38,0.08) 0%, transparent 60%), radial-gradient(ellipse at 80% 20%, rgba(201,168,76,0.05) 0%, transparent 50%), linear-gradient(135deg, #1a1612 0%, #080808 60%); }
-        .hero-vignette { position: absolute; inset: 0; background: radial-gradient(ellipse at center, transparent 30%, rgba(8,8,8,0.6) 100%); }
-        .hero-content { position: relative; z-index: 2; max-width: 1200px; }
-        .hero-eyebrow { font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); margin-bottom: 24px; display: flex; align-items: center; gap: 12px; }
-        .hero-eyebrow::before { content: ''; width: 32px; height: 1px; background: var(--accent); }
-        .hero-title { font-family: 'DM Serif Display', serif; font-size: clamp(3.5rem, 9vw, 9rem); line-height: 0.93; letter-spacing: -0.03em; margin-bottom: 40px; }
-        .hero-title em { font-style: italic; color: var(--accent); }
-        .hero-sub-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; flex-wrap: wrap; }
-        .hero-desc { font-size: 1rem; line-height: 1.7; color: var(--muted); max-width: 420px; }
-        .hero-stats { display: flex; gap: 48px; }
-        .stat-item { text-align: right; }
-        .stat-number { font-family: 'DM Serif Display', serif; font-size: 2.5rem; color: var(--offwhite); line-height: 1; }
-        .stat-label { font-family: 'Space Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); margin-top: 4px; }
-        .scroll-ind { position: absolute; right: 48px; top: 50%; transform: translateY(-50%) rotate(90deg); font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: 12px; }
-        .scroll-ind::after { content: ''; width: 48px; height: 1px; background: var(--muted); animation: scrl 2s ease-in-out infinite; }
-        @keyframes scrl { 0%,100% { opacity:0.3; width:24px; } 50% { opacity:1; width:48px; } }
-        .services-strip { padding: 28px 0; border-top: 1px solid rgba(242,237,232,0.08); border-bottom: 1px solid rgba(242,237,232,0.08); overflow: hidden; white-space: nowrap; }
-        .services-track { display: inline-flex; animation: marquee 28s linear infinite; }
-        @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-        .service-pill { display: inline-flex; align-items: center; gap: 16px; padding: 0 40px; font-family: 'DM Serif Display', serif; font-size: 1.25rem; color: var(--muted); }
-        .service-pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
-        section { padding: 120px 48px; }
-        .section-label { font-family: 'Space Mono', monospace; font-size: 0.62rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
-        .section-label::before { content: ''; width: 24px; height: 1px; background: var(--accent); }
-        .section-title { font-family: 'DM Serif Display', serif; font-size: clamp(2.5rem, 5vw, 4.5rem); line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 64px; }
-        #work { background: var(--black); }
-        .work-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 20px; }
-        .work-card { background: var(--card-bg); border: 1px solid rgba(242,237,232,0.06); overflow: hidden; position: relative; transition: border-color 0.3s, transform 0.3s; cursor: none; }
-        .work-card:hover { border-color: rgba(232,93,38,0.35); transform: translateY(-4px); }
-        .work-card.large { grid-column: span 7; }
-        .work-card.small { grid-column: span 5; }
-        .work-card.medium { grid-column: span 6; }
-        .video-wrapper { position: relative; width: 100%; padding-bottom: 56.25%; background: #0a0908; overflow: hidden; }
-        .video-wrapper iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
-        .card-info { padding: 24px 28px; display: flex; justify-content: space-between; align-items: flex-end; }
-        .card-title { font-family: 'DM Serif Display', serif; font-size: 1.3rem; color: var(--offwhite); }
-        .card-type { font-family: 'Space Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--accent); margin-top: 4px; }
-        .card-arrow { width: 36px; height: 36px; border: 1px solid rgba(242,237,232,0.15); display: flex; align-items: center; justify-content: center; transition: background 0.2s, border-color 0.2s; }
-        .work-card:hover .card-arrow { background: var(--accent); border-color: var(--accent); }
-        #about { background: var(--offwhite); color: var(--black); }
-        #about .section-label, #about .section-label::before { color: var(--accent); background: var(--accent); }
-        #about .section-title { color: var(--black); }
-        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
-        .about-text p { font-size: 1.05rem; line-height: 1.8; color: #4a4540; margin-bottom: 20px; }
-        .about-text p strong { color: var(--black); }
-        .tools-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 40px; }
-        .tool-chip { padding: 10px 16px; background: var(--black); color: var(--offwhite); font-family: 'Space Mono', monospace; font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; text-align: center; }
-        .about-image-side { position: relative; }
-        .about-img-frame { width: 100%; aspect-ratio: 3/4; background: var(--black); overflow: hidden; }
-        .about-img-frame img { width: 100%; height: 100%; object-fit: cover; }
-        .about-img-accent { position: absolute; bottom: -24px; right: -24px; width: 140px; height: 140px; background: var(--accent); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 2; }
-        .about-img-accent .n { font-family: 'DM Serif Display', serif; font-size: 2.8rem; color: white; line-height: 1; }
-        .about-img-accent .l { font-family: 'Space Mono', monospace; font-size: 0.55rem; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 0.1em; text-align: center; }
-        #testimonials { background: #0d0c0b; }
-        .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-        .testi-card { background: var(--card-bg); border: 1px solid rgba(242,237,232,0.06); padding: 36px 32px; }
-        .testi-quote { font-family: 'DM Serif Display', serif; font-size: 4rem; line-height: 0.6; color: var(--accent); margin-bottom: 20px; opacity: 0.6; }
-        .testi-text { font-size: 0.95rem; line-height: 1.75; color: #a09890; margin-bottom: 28px; font-style: italic; }
-        .testi-author { display: flex; align-items: center; gap: 14px; }
-        .testi-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-family: 'DM Serif Display', serif; font-size: 1rem; color: white; flex-shrink: 0; }
-        .testi-name { font-weight: 600; font-size: 0.9rem; color: var(--offwhite); }
-        .testi-role { font-family: 'Space Mono', monospace; font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-top: 2px; }
-        #contact { background: var(--black); padding: 160px 48px; }
-        .contact-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
-        .contact-left p { color: var(--muted); font-size: 1rem; line-height: 1.7; margin-bottom: 32px; }
-        .contact-links { display: flex; flex-direction: column; gap: 16px; }
-        .contact-link { display: flex; align-items: center; gap: 16px; color: var(--offwhite); text-decoration: none; font-size: 1rem; padding: 18px 24px; border: 1px solid rgba(242,237,232,0.08); transition: border-color 0.2s, background 0.2s; cursor: none; }
-        .contact-link:hover { border-color: var(--accent); background: rgba(232,93,38,0.05); }
-        .contact-link-icon { width: 36px; height: 36px; background: var(--accent); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        .contact-right { display: flex; flex-direction: column; gap: 24px; }
-        .contact-stat-block { border-left: 2px solid var(--accent); padding: 20px 28px; }
-        .contact-stat-num { font-family: 'DM Serif Display', serif; font-size: 3rem; line-height: 1; color: var(--offwhite); }
-        .contact-stat-label { font-family: 'Space Mono', monospace; font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); margin-top: 6px; }
-        .availability-badge { display: inline-flex; align-items: center; gap: 10px; padding: 12px 20px; background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.2); font-family: 'Space Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: #4ade80; margin-bottom: 24px; }
-        .avail-dot { width: 8px; height: 8px; border-radius: 50%; background: #4ade80; animation: pulse 2s ease-in-out infinite; }
-        @keyframes pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.5; transform:scale(0.8); } }
-        footer { padding: 40px 48px; border-top: 1px solid rgba(242,237,232,0.06); display: flex; justify-content: space-between; align-items: center; }
-        .footer-logo { font-family: 'DM Serif Display', serif; font-size: 1.1rem; color: var(--muted); }
-        .footer-logo span { color: var(--accent); font-style: italic; }
-        .footer-copy { font-family: 'Space Mono', monospace; font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--muted); }
-        .fade-up { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
-        .fade-up.visible { opacity: 1; transform: translateY(0); }
-        @media (max-width: 768px) {
-            nav { padding: 20px 24px; } .nav-links { display: none; }
-            section { padding: 80px 24px; } .hero { padding: 120px 24px 60px; }
-            .hero-title { font-size: 3.2rem; } .hero-stats { gap: 24px; }
-            .work-card.large, .work-card.small, .work-card.medium { grid-column: span 12; }
-            .about-grid { grid-template-columns: 1fr; gap: 48px; }
-            .testimonials-grid { grid-template-columns: 1fr; }
-            .contact-inner { grid-template-columns: 1fr; gap: 48px; }
-            .tools-grid { grid-template-columns: repeat(2, 1fr); }
-            footer { flex-direction: column; gap: 16px; text-align: center; }
-            .scroll-ind { display: none; } body { cursor: auto; } .cursor, .cursor-ring { display: none; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>George Waris — Video Editor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Outfit:wght@200;300;400;500;600&family=Roboto+Mono:wght@300;400&display=swap" rel="stylesheet">
+
+<style>
+/* ── RESET & VARIABLES ── */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --ink:    #09090b;
+  --paper:  #f5f0e8;
+  --warm:   #ede8df;
+  --red:    #c8382a;
+  --red2:   #a82d22;
+  --gold:   #b89a5a;
+  --dim:    #6b6560;
+  --border: rgba(255,255,255,0.07);
+}
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  background: var(--ink);
+  color: var(--paper);
+  font-family: 'Outfit', sans-serif;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ── CURSOR ── */
+#cur, #cur-trail {
+  position: fixed; top:0; left:0;
+  pointer-events: none; z-index: 9999;
+  border-radius: 50%;
+  will-change: transform;
+}
+#cur {
+  width: 8px; height: 8px;
+  background: var(--red);
+  transition: transform .08s ease;
+}
+#cur-trail {
+  width: 36px; height: 36px;
+  border: 1px solid rgba(200,56,42,0.45);
+  transition: width .3s, height .3s;
+  mix-blend-mode: difference;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top:0; left:0; right:0; z-index: 200;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 22px 48px;
+  background: linear-gradient(to bottom, rgba(9,9,11,0.98) 0%, transparent 100%);
+}
+.logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.15rem;
+  letter-spacing: -.01em;
+  color: var(--paper);
+  text-decoration: none;
+}
+.logo span { color: var(--red); font-style: italic; }
+.nav-links { display: flex; gap: 36px; list-style: none; }
+.nav-links a {
+  font-family: 'Roboto Mono', monospace;
+  font-size: .68rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--dim);
+  text-decoration: none;
+  transition: color .25s;
+}
+.nav-links a:hover { color: var(--paper); }
+.nav-hire {
+  font-family: 'Roboto Mono', monospace;
+  font-size: .68rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  background: var(--red);
+  color: #fff;
+  padding: 11px 26px;
+  text-decoration: none;
+  transition: background .25s;
+}
+.nav-hire:hover { background: var(--red2); }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100svh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: end;
+  padding: 0 48px 72px;
+  position: relative;
+  overflow: hidden;
+  gap: 0 60px;
+}
+.hero-ambient {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 55% 55% at 75% 30%, rgba(200,56,42,.1) 0%, transparent 65%),
+    radial-gradient(ellipse 40% 50% at 15% 80%, rgba(184,154,90,.06) 0%, transparent 60%);
+  animation: ambPulse 8s ease-in-out infinite alternate;
+}
+@keyframes ambPulse {
+  from { opacity: .6; }
+  to   { opacity: 1; }
+}
+.hero::after {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='1'/%3E%3C/svg%3E");
+  background-size: 256px;
+  opacity: .035;
+  pointer-events: none;
+}
+.hero-left { position: relative; z-index:2; padding-bottom: 8px; }
+.hero-eyebrow {
+  font-family: 'Roboto Mono', monospace;
+  font-size: .62rem;
+  letter-spacing: .32em;
+  text-transform: uppercase;
+  color: var(--red);
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 28px;
+  opacity: 0; animation: riseIn .7s .2s forwards;
+}
+.hero-eyebrow::before { content:''; width:28px; height:1px; background:var(--red); }
+.hero-h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(3.6rem, 7.5vw, 7.8rem);
+  font-weight: 900;
+  line-height: .92;
+  letter-spacing: -.03em;
+  opacity: 0; animation: riseIn .8s .35s forwards;
+}
+.hero-h1 em { font-style: italic; color: var(--red); display: block; }
+.hero-h1 .outline-txt {
+  -webkit-text-stroke: 1.5px var(--paper);
+  color: transparent;
+  display: block;
+}
+.hero-desc {
+  margin-top: 36px;
+  font-size: 1rem;
+  font-weight: 300;
+  color: var(--dim);
+  line-height: 1.75;
+  max-width: 400px;
+  opacity: 0; animation: riseIn .8s .55s forwards;
+}
+.hero-btns {
+  margin-top: 44px;
+  display: flex; gap: 18px; align-items: center;
+  opacity: 0; animation: riseIn .8s .7s forwards;
+}
+.btn-solid {
+  background: var(--red);
+  color: #fff;
+  padding: 16px 40px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: .7rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background .25s, transform .2s;
+  display: inline-block;
+}
+.btn-solid:hover { background: var(--red2); transform: translateY(-2px); }
+.btn-line {
+  color: var(--dim);
+  font-family: 'Roboto Mono', monospace;
+  font-size: .7rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-bottom: 1px solid #333;
+  padding-bottom: 3px;
+  transition: color .25s, border-color .25s;
+}
+.btn-line:hover { color: var(--paper); border-color: var(--paper); }
+.hero-right {
+  position: relative; z-index:2;
+  display: flex; flex-direction: column;
+  justify-content: flex-end;
+  gap: 2px;
+  opacity: 0; animation: riseIn .9s .85s forwards;
+}
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 32px;
+  background: rgba(255,255,255,.03);
+  border: 1px solid var(--border);
+  transition: background .3s;
+}
+.stat-row:hover { background: rgba(255,255,255,.06); }
+.stat-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--paper);
+  line-height: 1;
+}
+.stat-num span { color: var(--red); }
+.stat-label {
+  font-family: 'Roboto Mono', monospace;
+  font-size: .6rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--dim);
+  text-align: right;
+  max-width: 110px;
+  line-height: 1.5;
+}
+@keyframes riseIn {
+  from { opacity:0; transform: translateY(28px); }
+  to   { opacity:1; transform: translateY(0); }
+}
+.scroll-hint {
+  position: absolute;
+  bottom: 72px; right: 48px;
+  z-index: 3;
+  writing-mode: vertical-rl;
+  font-family: 'Roboto Mono', monospace;
+  font-size: .58rem;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: #333;
+  display: flex; align-items: center; gap: 10px;
+  opacity: 0; animation: riseIn 1s 1.2s forwards;
+}
+.scroll-hint::after {
+  content: '';
+  width: 1px;
+  height: 48px;
+  background: linear-gradient(to bottom, #333, transparent);
+  animation: scrollLine 2s ease-in-out infinite;
+}
+@keyframes scrollLine {
+  0%,100% { height:24px; opacity:.4; }
+  50%      { height:48px; opacity:1; }
+}
+
+/* ── MARQUEE ── */
+.marquee-wrap {
+  overflow: hidden;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: rgba(200,56,42,.06);
+  padding: 16px 0;
+}
+.marquee-track {
+  display: flex;
+  animation: marquee 22s linear infinite;
+  white-space: nowrap;
+}
+.marquee-item {
+  font-family: 'Playfair Display', serif;
+  font-size: .95rem;
+  font-style: italic;
+  color: var(--dim);
+  padding: 0 48px;
+  display: flex; align-items: center; gap: 48px;
+  flex-shrink: 0;
+}
+.marquee-item::after { content: '✦'; font-style: normal; font-size: .5rem; color: var(--red); }
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ── SECTION COMMONS ── */
+.sec { padding: 100px 48px; }
+.sec-label {
+  font-family: 'Roboto Mono', monospace;
+  font-size: .62rem;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--red);
+  display: flex; align-items: center; gap: 16px;
+  margin-bottom: 56px;
+}
+.sec-label::after { content:''; flex:1; height:1px; background:var(--border); }
+.sec-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.4rem, 4.5vw, 4.8rem);
+  font-weight: 900;
+  line-height: .96;
+  letter-spacing: -.03em;
+}
+.sec-title em { font-style: italic; color: var(--red); }
+
+/* ── SERVICES ── */
+.services { background: #0d0d10; }
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+  margin-top: 64px;
+}
+.svc {
+  padding: 48px 32px 52px;
+  background: rgba(255,255,255,.02);
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+  transition: background .35s;
+}
+.svc::before {
+  content: '';
+  position: absolute;
+  left: 0; bottom: 0; right: 0;
+  height: 2px;
+  background: var(--red);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .4s ease;
+}
+.svc:hover { background: rgba(255,255,255,.05); }
+.svc:hover::before { transform: scaleX(1); }
+.svc-n {
+  font-family: 'Playfair Display', serif;
+  font-size: 5rem;
+  font-weight: 900;
+  color: rgba(255,255,255,.04);
+  line-height: 1;
+  margin-bottom: 24px;
+  transition: color .35s;
+}
+.svc:hover .svc-n { color: rgba(200,56,42,.12); }
+.svc-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 14px;
+  color: var(--paper);
+}
+.svc-desc { font-size: .88rem; font-weight: 300; color: var(--dim); line-height: 1.75; }
+
+/* ── WORK ── */
+.work { background: var(--ink); padding: 100px 0; }
+.work-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 0 48px;
+  margin-bottom: 40px;
+}
+.filter-tabs { display: flex; gap: 6px; }
+.ftab {
+  font-family: 'Roboto Mono', monospace;
+  font-size: .62rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  padding: 9px 20px;
+  background: transparent;
+  border: 1px solid #222;
+  color: var(--dim);
+  cursor: none;
+  transition: all .25s;
+}
+.ftab.on, .ftab:hover {
+  background: var(--red);
+  border-color: var(--red);
+  color: #fff;
+}
+
+.vgrid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 3px;
+  padding: 0 3px;
+}
+.vc-a { grid-column: span 8; }
+.vc-b { grid-column: span 4; }
+.vc-c { grid-column: span 4; }
+.vc-d { grid-column: span 8; }
+.vc-e { grid-column: span 6; }
+.vc-f { grid-column: span 6; }
+.vc-g { grid-column: span 4; }
+.vc-h { grid-column: span 4; }
+.vc-i { grid-column: span 4; }
+.vc-j { grid-column: span 6; }
+.vc-k { grid-column: span 6; }
+
+.vcard {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  text-decoration: none;
+  aspect-ratio: 16/10;
+  background: #111;
+  transition: opacity .4s, transform .5s;
+}
+.vc-a, .vc-d { aspect-ratio: 16/8; }
+
+.vcard-thumb {
+  position: absolute; inset: 0;
+  overflow: hidden;
+}
+.vcard-thumb::before {
+  content: '';
+  position: absolute; inset: 0; z-index: 1;
+  background: linear-gradient(135deg,
+    rgba(9,9,11,.55) 0%,
+    rgba(9,9,11,.2) 50%,
+    rgba(200,56,42,.2) 100%);
+  transition: opacity .4s;
+}
+.vcard:hover .vcard-thumb::before { opacity: .9; }
+
+.vcard:nth-child(1)  .vcard-thumb { background: linear-gradient(135deg,#1a1212,#2a1510); }
+.vcard:nth-child(2)  .vcard-thumb { background: linear-gradient(135deg,#0f1520,#1a2030); }
+.vcard:nth-child(3)  .vcard-thumb { background: linear-gradient(135deg,#141a10,#1e2818); }
+.vcard:nth-child(4)  .vcard-thumb { background: linear-gradient(135deg,#1e1510,#2a1e12); }
+.vcard:nth-child(5)  .vcard-thumb { background: linear-gradient(135deg,#101520,#161e2a); }
+.vcard:nth-child(6)  .vcard-thumb { background: linear-gradient(135deg,#1a1012,#28151a); }
+.vcard:nth-child(7)  .vcard-thumb { background: linear-gradient(135deg,#12141a,#1a1e26); }
+.vcard:nth-child(8)  .vcard-thumb { background: linear-gradient(135deg,#1a1218,#261a22); }
+.vcard:nth-child(9)  .vcard-thumb { background: linear-gradient(135deg,#0e1812,#14221a); }
+.vcard:nth-child(10) .vcard-thumb { background: linear-gradient(135deg,#1a1010,#261818); }
+.vcard:nth-child(11) .vcard-thumb { background: linear-gradient(135deg,#101018,#181820); }
+
+.vcard-shape {
+  position: absolute; inset: 0; z-index: 0;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+.vcard-shape svg { width: 60%; height: 60%; opacity: .07; transition: opacity .4s, transform .5s; }
+.vcard:hover .vcard-shape svg { opacity: .14; transform: scale(1.1) rotate(8deg); }
+
+.vcard-img {
+  position: absolute; inset: 0; z-index: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  filter: brightness(.5) saturate(.7);
+  transition: transform .6s ease, filter .4s;
+}
+.vcard:hover .vcard-img { transform: scale(1.06); filter: brightness(.3) saturate(.5); }
+
+.vcard-body {
+  position: absolute; inset: 0; z-index: 4;
+  display: flex; flex-direction: column;
+  justify-content: flex-end;
+  padding: 28px 32px;
+  background: linear-gradient(to top, rgba(9,9,11,.92) 0%, rgba(9,9,11,.25) 45%, transparent 70%);
+}
+.vcard-tag {
+  font-family: 'Roboto Mono', monospace;
+  font-size: .58rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 6px;
+}
+.vcard-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--paper);
+  line-height: 1.25;
+}
+.vc-a .vcard-name, .vc-d .vcard-name { font-size: 1.55rem; }
+.vcard-dur {
+  font-family: 'Roboto Mono', monospace;
+  font-size: .6rem;
+  color: #444;
+  margin-top: 6px;
+  transition: color .3s;
+}
+.vcard:hover .vcard-dur { color: var(--dim); }
+
+.vcard-play {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%) scale(.7);
+  width: 60px; height: 60px;
+  border: 2px solid rgba(255,255,255,.3);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0;
+  transition: opacity .3s, transform .3s, border-color .3s;
+  z-index: 5;
+  backdrop-filter: blur(4px);
+  background: rgba(200,56,42,.25);
+}
+.vcard-play::after {
+  content: '';
+  width: 0; height: 0;
+  border-style: solid;
+  border-width: 9px 0 9px 16px;
+  border-color: transparent transparent transparent #fff;
+  margin-left: 4px;
+}
+.vcard:hover .vcard-play {
+  opacity: 1;
+  transform: translate(-50%,-50%) scale(1);
+  border-color: rgba(255,255,255,.7);
+}
+
+.vcard-arrow {
+  position: absolute;
+  top: 20px; right: 20px;
+  z-index: 5;
+  width: 36px; height: 36px;
+  background: var(--red);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transform: scale(.7);
+  transition: opacity .3s, transform .3s;
+}
+.vcard:hover .vcard-arrow { opacity: 1; transform: scale(1); }
+.vcard-arrow svg { width: 14px; height: 14px; }
+
+/* ── TESTIMONIALS ── */
+.testi { background: #0d0d10; }
+.testi-grid {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 2px;
+  margin-top: 64px;
+}
+.tcard {
+  background: rgba(255,255,255,.025);
+  border: 1px solid var(--border);
+  padding: 44px 40px;
+  position: relative;
+  transition: background .3s;
+}
+.tcard:hover { background: rgba(255,255,255,.05); }
+.tcard-quote {
+  font-family: 'Playfair Display', serif;
+  font-size: 5rem;
+  line-height: .7;
+  color: var(--red);
+  opacity: .18;
+  position: absolute;
+  top: 28px; left: 32px;
+  font-weight: 900;
+}
+.tcard-stars { color: var(--gold); font-size: .75rem; letter-spacing: 3px; margin-bottom: 20px; }
+.tcard-text {
+  font-size: .95rem;
+  font-weight: 300;
+  line-height: 1.8;
+  color: #999;
+  font-style: italic;
+  margin-bottom: 36px;
+  position: relative;
+}
+.tcard-author { display: flex; align-items: center; gap: 14px; }
+.tcard-avatar {
+  width: 42px; height: 42px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--red), var(--gold));
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+.tcard-name {
+  font-family: 'Roboto Mono', monospace;
+  font-size: .68rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--paper);
+}
+.tcard-role { font-size: .8rem; color: var(--dim); margin-top: 3px; }
+
+/* ── ABOUT ── */
+.about {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 80px;
+  align-items: center;
+  background: var(--ink);
+}
+.about-title { font-size: clamp(2.4rem,4vw,4.5rem); margin-bottom: 32px; }
+.about p { font-size: .98rem; font-weight: 300; color: var(--dim); line-height: 1.85; margin-bottom: 20px; }
+.about p strong { color: var(--paper); font-weight: 500; }
+.tools { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 36px; }
+.tool {
+  font-family: 'Roboto Mono', monospace;
+  font-size: .62rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  padding: 8px 16px;
+  border: 1px solid #252525;
+  color: #555;
+  transition: border-color .25s, color .25s;
+}
+.tool:hover { border-color: var(--red); color: var(--red); }
+.about-stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+.astat {
+  background: rgba(255,255,255,.025);
+  border: 1px solid var(--border);
+  padding: 44px 32px;
+  transition: background .3s;
+}
+.astat:hover { background: rgba(255,255,255,.05); }
+.astat-n {
+  font-family: 'Playfair Display', serif;
+  font-size: 3.5rem;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--paper);
+  margin-bottom: 8px;
+}
+.astat-n sup { font-size: 1.5rem; color: var(--red); vertical-align: super; }
+.astat-l { font-size: .8rem; font-weight: 300; color: var(--dim); line-height: 1.5; }
+
+/* ── CONTACT ── */
+.contact-wrap {
+  background: #0d0d10;
+  padding: 100px 48px 80px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.contact-wrap::before {
+  content: '';
+  position: absolute;
+  top: -60px; left: 50%;
+  transform: translateX(-50%);
+  width: 600px; height: 300px;
+  background: radial-gradient(ellipse, rgba(200,56,42,.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+.contact-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(3rem, 8vw, 9rem);
+  font-weight: 900;
+  line-height: .92;
+  letter-spacing: -.04em;
+  position: relative;
+}
+.contact-title em { font-style: italic; color: var(--red); }
+.contact-title .ghost {
+  -webkit-text-stroke: 1px rgba(255,255,255,.15);
+  color: transparent;
+}
+.contact-sub {
+  font-size: 1rem;
+  font-weight: 300;
+  color: var(--dim);
+  margin: 32px auto 56px;
+  max-width: 380px;
+  line-height: 1.75;
+}
+.contact-links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+.contact-email {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  font-style: italic;
+  color: var(--paper);
+  text-decoration: none;
+  border-bottom: 2px solid var(--red);
+  padding-bottom: 4px;
+  transition: color .25s;
+}
+.contact-email:hover { color: var(--red); }
+.sep { color: #222; }
+.contact-phone {
+  font-family: 'Roboto Mono', monospace;
+  font-size: .8rem;
+  letter-spacing: .12em;
+  color: var(--dim);
+  text-decoration: none;
+  transition: color .25s;
+}
+.contact-phone:hover { color: var(--paper); }
+.contact-social { display: flex; justify-content: center; gap: 16px; margin-top: 56px; }
+.soc-link {
+  font-family: 'Roboto Mono', monospace;
+  font-size: .6rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--dim);
+  text-decoration: none;
+  border: 1px solid #1e1e1e;
+  padding: 11px 24px;
+  transition: border-color .25s, color .25s;
+}
+.soc-link:hover { border-color: var(--red); color: var(--red); }
+
+/* ── FOOTER ── */
+footer {
+  padding: 28px 48px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--ink);
+}
+footer .flogo { font-family: 'Playfair Display', serif; font-size: 1rem; color: #333; }
+footer .flogo span { color: var(--red); font-style: italic; }
+footer p {
+  font-family: 'Roboto Mono', monospace;
+  font-size: .6rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: #2a2a2a;
+}
+
+/* ── SCROLL REVEAL ── */
+.reveal { opacity: 0; transform: translateY(36px); transition: opacity .7s ease, transform .7s ease; }
+.reveal.in { opacity: 1; transform: translateY(0); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1024px) {
+  .hero { grid-template-columns: 1fr; padding-bottom: 60px; }
+  .hero-right { display: none; }
+  .services-grid { grid-template-columns: 1fr 1fr; }
+  .vc-a,.vc-d { grid-column: span 12; }
+  .vc-b,.vc-c,.vc-e,.vc-f,.vc-g,.vc-h,.vc-i,.vc-j,.vc-k { grid-column: span 6; }
+  .testi-grid { grid-template-columns: 1fr; }
+  .about { grid-template-columns: 1fr; gap: 48px; }
+  nav { padding: 20px 24px; }
+  .nav-links { display: none; }
+  .hero { padding-left: 24px; padding-right: 24px; }
+  .sec { padding: 80px 24px; }
+  .work-header { flex-direction: column; gap: 24px; align-items: flex-start; padding: 0 24px; }
+  .contact-wrap { padding: 80px 24px 60px; }
+  footer { padding: 24px; flex-direction: column; gap: 12px; text-align: center; }
+}
+@media (max-width: 640px) {
+  .services-grid { grid-template-columns: 1fr; }
+  .vc-b,.vc-c,.vc-e,.vc-f,.vc-g,.vc-h,.vc-i,.vc-j,.vc-k { grid-column: span 12; }
+  .about-stats-grid { grid-template-columns: 1fr; }
+  .hero-h1 { font-size: 3.2rem; }
+}
+</style>
 </head>
 <body>
 
-<div class="cursor" id="cursor"></div>
-<div class="cursor-ring" id="cursorRing"></div>
+<div id="cur"></div>
+<div id="cur-trail"></div>
 
+<!-- NAV -->
 <nav>
-    <a href="#" class="nav-logo">George<span>Waris</span></a>
-    <ul class="nav-links">
-        <li><a href="#work">Work</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#testimonials">Reviews</a></li>
-        <li><a href="#contact">Contact</a></li>
-    </ul>
-    <a href="mailto:Georgetown98000@gmail.com" class="nav-cta">Hire Me</a>
+  <a href="#" class="logo">George<span>Waris</span></a>
+  <ul class="nav-links">
+    <li><a href="#work">Work</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="mailto:Georgetown98000@gmail.com" class="nav-hire">Hire Me</a>
 </nav>
 
+<!-- HERO -->
 <header class="hero">
-    <div class="hero-bg"></div>
-    <div class="hero-vignette"></div>
-    <div class="scroll-ind">Scroll</div>
-    <div class="hero-content">
-        <div class="hero-eyebrow">Video Editor &amp; Motion Designer</div>
-        <h1 class="hero-title">Frames that<br><em>move</em> people.</h1>
-        <div class="hero-sub-row">
-            <p class="hero-desc">I craft cinematic edits, scroll-stopping ads, and high-retention content — turning raw footage into stories that convert and captivate.</p>
-            <div class="hero-stats">
-                <div class="stat-item"><div class="stat-number">50+</div><div class="stat-label">Projects Done</div></div>
-                <div class="stat-item"><div class="stat-number">4yr</div><div class="stat-label">Experience</div></div>
-                <div class="stat-item"><div class="stat-number">100%</div><div class="stat-label">Satisfaction</div></div>
-            </div>
-        </div>
+  <div class="hero-ambient"></div>
+  <div class="hero-left">
+    <div class="hero-eyebrow">Video Editor &amp; Motion Artist</div>
+    <h1 class="hero-h1">
+      <span class="outline-txt">Frames</span>
+      <em>That Hit.</em>
+    </h1>
+    <p class="hero-desc">I craft high-impact video content — cinematic films, scroll-stopping ads, and YouTube edits that keep audiences watching and wallets open.</p>
+    <div class="hero-btns">
+      <a href="#work" class="btn-solid">Watch My Work</a>
+      <a href="#contact" class="btn-line">Get a Quote</a>
     </div>
+  </div>
+  <div class="hero-right">
+    <div class="stat-row">
+      <div class="stat-num">150<span>+</span></div>
+      <div class="stat-label">Projects Delivered</div>
+    </div>
+    <div class="stat-row">
+      <div class="stat-num">4M<span>+</span></div>
+      <div class="stat-label">Total Views Generated</div>
+    </div>
+    <div class="stat-row">
+      <div class="stat-num">48<span>h</span></div>
+      <div class="stat-label">Avg. Turnaround</div>
+    </div>
+    <div class="stat-row">
+      <div class="stat-num">100<span>%</span></div>
+      <div class="stat-label">Client Satisfaction</div>
+    </div>
+  </div>
+  <div class="scroll-hint">Scroll</div>
 </header>
 
-<div class="services-strip">
-    <div class="services-track">
-        <span class="service-pill"><span class="dot"></span> YouTube Editing</span>
-        <span class="service-pill"><span class="dot"></span> Ad Creative</span>
-        <span class="service-pill"><span class="dot"></span> Cinematic Film</span>
-        <span class="service-pill"><span class="dot"></span> Reels &amp; TikTok</span>
-        <span class="service-pill"><span class="dot"></span> Motion Graphics</span>
-        <span class="service-pill"><span class="dot"></span> Color Grading</span>
-        <span class="service-pill"><span class="dot"></span> Sound Design</span>
-        <span class="service-pill"><span class="dot"></span> YouTube Editing</span>
-        <span class="service-pill"><span class="dot"></span> Ad Creative</span>
-        <span class="service-pill"><span class="dot"></span> Cinematic Film</span>
-        <span class="service-pill"><span class="dot"></span> Reels &amp; TikTok</span>
-        <span class="service-pill"><span class="dot"></span> Motion Graphics</span>
-        <span class="service-pill"><span class="dot"></span> Color Grading</span>
-        <span class="service-pill"><span class="dot"></span> Sound Design</span>
-    </div>
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">YouTube Editing</span>
+    <span class="marquee-item">Ad Creatives</span>
+    <span class="marquee-item">Cinematic Film</span>
+    <span class="marquee-item">Reels &amp; TikTok</span>
+    <span class="marquee-item">Color Grading</span>
+    <span class="marquee-item">Motion Graphics</span>
+    <span class="marquee-item">Sound Design</span>
+    <span class="marquee-item">Brand Storytelling</span>
+    <span class="marquee-item">YouTube Editing</span>
+    <span class="marquee-item">Ad Creatives</span>
+    <span class="marquee-item">Cinematic Film</span>
+    <span class="marquee-item">Reels &amp; TikTok</span>
+    <span class="marquee-item">Color Grading</span>
+    <span class="marquee-item">Motion Graphics</span>
+    <span class="marquee-item">Sound Design</span>
+    <span class="marquee-item">Brand Storytelling</span>
+  </div>
 </div>
 
-<section id="work">
-    <div class="section-label">Selected Work</div>
-    <h2 class="section-title">Edits that<br><em style="font-style:italic;color:var(--accent)">perform.</em></h2>
-    <!-- Jumpshare video grid — all 11 real projects -->
-    <style>
-        .js-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 3px;
-            padding: 0 48px 80px;
-        }
-        .js-grid .js-card-featured {
-            grid-column: span 2;
-        }
-        .js-card {
-            display: block;
-            position: relative;
-            overflow: hidden;
-            background: #111;
-            text-decoration: none;
-            aspect-ratio: 16/9;
-            cursor: none;
-        }
-        .js-card img {
-            width: 100%; height: 100%;
-            object-fit: cover;
-            display: block;
-            transition: transform 0.5s ease, filter 0.4s ease;
-            filter: brightness(0.65);
-        }
-        .js-card:hover img { transform: scale(1.06); filter: brightness(0.35); }
-        .js-card-overlay {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            padding: 24px 28px;
-            background: linear-gradient(to top, rgba(0,0,0,0.88) 0%, transparent 55%);
-        }
-        .js-card-tag {
-            font-family: 'Space Mono', monospace;
-            font-size: 9px;
-            letter-spacing: 0.22em;
-            text-transform: uppercase;
-            color: var(--accent);
-            margin-bottom: 5px;
-        }
-        .js-card-title {
-            font-family: 'DM Serif Display', serif;
-            font-size: 17px;
-            line-height: 1.25;
-            color: var(--offwhite);
-        }
-        .js-card-featured .js-card-title { font-size: 26px; }
-        .js-play {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%,-50%) scale(0.7);
-            width: 52px; height: 52px;
-            border: 2px solid var(--accent);
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            opacity: 0;
-            transition: opacity 0.3s, transform 0.3s;
-        }
-        .js-card:hover .js-play { opacity: 1; transform: translate(-50%,-50%) scale(1); }
-        .js-play::after {
-            content: '';
-            width: 0; height: 0;
-            border-style: solid;
-            border-width: 8px 0 8px 14px;
-            border-color: transparent transparent transparent var(--accent);
-            margin-left: 4px;
-        }
-        @media (max-width: 900px) {
-            .js-grid { grid-template-columns: 1fr; padding: 0 24px 60px; }
-            .js-grid .js-card-featured { grid-column: span 1; }
-        }
-    </style>
-
-    <div class="js-grid">
-
-        <!-- 1. Featured -->
-        <a href="https://jumpshare.com/share/twRXg5MoT7NPXt1nZLQI" target="_blank" class="js-card js-card-featured fade-up">
-            <img src="https://previews.jumpshare.com/thumb/8347537cc507cff07a90f5a5803f8e5e68102b58648ba8d8c44dc6f1f82f45527f121d71548cd4ff48c68f70541d6262f601c4f9d00a3d9f7f5bd8e2123ccaed4109dc837e9110b015d63cac06fa2a5c" alt="Logo won't make you billions" loading="lazy">
-            <div class="js-play"></div>
-            <div class="js-card-overlay">
-                <div class="js-card-tag">Short-Form · Ad</div>
-                <div class="js-card-title">Your Logo Won't Make You Billions</div>
-            </div>
-        </a>
-
-        <!-- 2 -->
-        <a href="https://jumpshare.com/share/4reqMqqvRcZOYo2TxQwJ" target="_blank" class="js-card fade-up">
-            <img src="https://previews.jumpshare.com/thumb/8347537cc507cff07a90f5a5803f8e5e319b3dee96473c673e857d4610809e44a511e35b8b71ba7f822114d8ef576248b15d137cafa728ddacd115515e527ec13fd6e91a58cbf467833c137542dd4e67" alt="Why Brand Strategy" loading="lazy">
-            <div class="js-play"></div>
-            <div class="js-card-overlay">
-                <div class="js-card-tag">YouTube · Content</div>
-                <div class="js-card-title">Why You Need a Brand Strategy</div>
-            </div>
-        </a>
-
-        <!-- 3 -->
-        <a href="https://jumpshare.com/share/s7FLY1ovEjB8Rx7LWhGs" target="_blank" class="js-card fade-up">
-            <img src="https://previews.jumpshare.com/thumb/8347537cc507cff07a90f5a5803f8e5e68102b58648ba8d8c44dc6f1f82f45527f121d71548cd4ff48c68f70541d6262f601c4f9d00a3d9f7f5bd8e2123ccaed4109dc837e9110b015d63cac06fa2a5c" alt="Video 3" loading="lazy" style="filter:brightness(0.55) hue-rotate(10deg)">
-            <div class="js-play"></div>
-            <div class="js-card-overlay">
-                <div class="js-card-tag">Short-Form · Reel</div>
-                <div class="js-card-title">Project 03</div>
-            </div>
-        </a>
-
-        <!-- 4 -->
-        <a href="https://jumpshare.com/share/olSUlhjUOHj7wcZqupEH" target="_blank" class="js-card fade-up">
-            <img src="https://previews.jumpshare.com/thumb/8347537cc507cff07a90f5a5803f8e5e319b3dee96473c673e857d4610809e44a511e35b8b71ba7f822114d8ef576248b15d137cafa728ddacd115515e527ec13fd6e91a58cbf467833c137542dd4e67" alt="Video 4" loading="lazy" style="filter:brightness(0.6) hue-rotate(20deg)">
-            <div class="js-play"></div>
-            <div class="js-card-overlay">
-                <div class="js-card-tag">Cinematic · Brand</div>
-                <div class="js-card-title">Project 04</div>
-            </div>
-        </a>
-
-        <!-- 5 -->
-        <a href="https://jumpshare.com/share/ifakMCYC2JpmZNqUTZeh" target="_blank" class="js-card fade-up">
-            <img src="https://previews.jumpshare.com/thumb/8347537cc507cff07a90f5a5803f8e5e68102b58648ba8d8c44dc6f1f82f45527f121d71548cd4ff48c68f70541d6262f601c4f9d00a3d9f7f5bd8e2123ccaed4109dc837e9110b015d63cac06fa2a5c" alt="Video 5" loading="lazy" style="filter:brightness(0.5) hue-rotate(-10deg)">
-            <div class="js-play"></div>
-            <div class="js-card-overlay">
-                <div class="js-card-tag">YouTube · Content</div>
-                <div class="js-card-title">Project 05</div>
-            </div>
-        </a>
-
-        <!-- 6 -->
-        <a href="https://jumpshare.com/share/JwA12uaIE9NowLeKlbLj" target="_blank" class="js-card fade-up">
-            <img src="https://previews.jumpshare.com/thumb/8347537cc507cff07a90f5a5803f8e5e319b3dee96473c673e857d4610809e44a511e35b8b71ba7f822114d8ef576248b15d137cafa728ddacd115515e527ec13fd6e91a58cbf467833c137542dd4e67" alt="Video 6" loading="lazy" style="filter:brightness(0.55) hue-rotate(30deg)">
-            <div class="js-play"></div>
-            <div class="js-card-overlay">
-                <div class="js-card-tag">Ads · Commercial</div>
-                <div class="js-card-title">Project 06</div>
-            </div>
-        </a>
-
-        <!-- 7 -->
-        <a href="https://jumpshare.com/share/u7uZpVsmnoi2jyo7RCGH" target="_blank" class="js-card fade-up">
-            <img src="https://previews.jumpshare.com/thumb/8347537cc507cff07a90f5a5803f8e5e68102b58648ba8d8c44dc6f1f82f45527f121d71548cd4ff48c68f70541d6262f601c4f9d00a3d9f7f5bd8e2123ccaed4109dc837e9110b015d63cac06fa2a5c" alt="Video 7" loading="lazy" style="filter:brightness(0.6) hue-rotate(-20deg)">
-            <div class="js-play"></div>
-            <div class="js-card-overlay">
-                <div class="js-card-tag">Short-Form · TikTok</div>
-                <div class="js-card-title">Project 07</div>
-            </div>
-        </a>
-
-        <!-- 8 -->
-        <a href="https://jumpshare.com/share/GtMQxs192aE703lVQTNY" target="_blank" class="js-card fade-up">
-            <img src="https://previews.jumpshare.com/thumb/8347537cc507cff07a90f5a5803f8e5e319b3dee96473c673e857d4610809e44a511e35b8b71ba7f822114d8ef576248b15d137cafa728ddacd115515e527ec13fd6e91a58cbf467833c137542dd4e67" alt="Video 8" loading="lazy" style="filter:brightness(0.55) hue-rotate(15deg)">
-            <div class="js-play"></div>
-            <div class="js-card-overlay">
-                <div class="js-card-tag">Cinematic · Film</div>
-                <div class="js-card-title">Project 08</div>
-            </div>
-        </a>
-
-        <!-- 9 -->
-        <a href="https://jumpshare.com/share/W568HvnXLM6omNDasWfd" target="_blank" class="js-card fade-up">
-            <img src="https://previews.jumpshare.com/thumb/8347537cc507cff07a90f5a5803f8e5e68102b58648ba8d8c44dc6f1f82f45527f121d71548cd4ff48c68f70541d6262f601c4f9d00a3d9f7f5bd8e2123ccaed4109dc837e9110b015d63cac06fa2a5c" alt="Video 9" loading="lazy" style="filter:brightness(0.5) hue-rotate(-15deg)">
-            <div class="js-play"></div>
-            <div class="js-card-overlay">
-                <div class="js-card-tag">YouTube · Brand</div>
-                <div class="js-card-title">Project 09</div>
-            </div>
-        </a>
-
-        <!-- 10 -->
-        <a href="https://jumpshare.com/share/AkxPsAGxs5FLMARoHJsy" target="_blank" class="js-card fade-up">
-            <img src="https://previews.jumpshare.com/thumb/8347537cc507cff07a90f5a5803f8e5e319b3dee96473c673e857d4610809e44a511e35b8b71ba7f822114d8ef576248b15d137cafa728ddacd115515e527ec13fd6e91a58cbf467833c137542dd4e67" alt="Video 10" loading="lazy" style="filter:brightness(0.6) hue-rotate(25deg)">
-            <div class="js-play"></div>
-            <div class="js-card-overlay">
-                <div class="js-card-tag">Ads · Short-Form</div>
-                <div class="js-card-title">Project 10</div>
-            </div>
-        </a>
-
-        <!-- 11 -->
-        <a href="https://jumpshare.com/share/yFIfoprRqzrpNeN8Sr1g" target="_blank" class="js-card fade-up">
-            <img src="https://previews.jumpshare.com/thumb/8347537cc507cff07a90f5a5803f8e5e68102b58648ba8d8c44dc6f1f82f45527f121d71548cd4ff48c68f70541d6262f601c4f9d00a3d9f7f5bd8e2123ccaed4109dc837e9110b015d63cac06fa2a5c" alt="Video 11" loading="lazy" style="filter:brightness(0.55) hue-rotate(-5deg)">
-            <div class="js-play"></div>
-            <div class="js-card-overlay">
-                <div class="js-card-tag">Cinematic · Reel</div>
-                <div class="js-card-title">Project 11</div>
-            </div>
-        </a>
-
-    </div>
+<!-- SERVICES -->
+<section class="sec services" id="services">
+  <div class="sec-label">What I Do</div>
+  <h2 class="sec-title">The craft,<br><em>perfected.</em></h2>
+  <div class="services-grid">
+    <div class="svc reveal"><div class="svc-n">01</div><div class="svc-title">YouTube &amp; Long-Form</div><p class="svc-desc">Retention-optimised edits with punchy pacing, dynamic b-roll, and chapter structure that keeps viewers until the very last second.</p></div>
+    <div class="svc reveal"><div class="svc-n">02</div><div class="svc-title">Ads &amp; Commercial</div><p class="svc-desc">Direct-response video ads with scroll-stopping hooks, persuasive narrative, and platform-native formatting built to convert.</p></div>
+    <div class="svc reveal"><div class="svc-n">03</div><div class="svc-title">Cinematic Film</div><p class="svc-desc">Beautifully graded, story-driven brand films and documentaries that leave a lasting impression long after the credits roll.</p></div>
+    <div class="svc reveal"><div class="svc-n">04</div><div class="svc-title">Reels &amp; TikTok</div><p class="svc-desc">Snappy short-form edits with fast cuts, viral mechanics, auto-captions, and sound design calibrated for algorithmic reach.</p></div>
+  </div>
 </section>
 
-<section id="about">
-    <div class="section-label">About Me</div>
-    <div class="about-grid">
-        <div class="about-text">
-            <h2 class="section-title">Every frame<br>tells a story.</h2>
-            <p>Hi, I'm <strong>George Waris</strong> — a video editor and motion designer with a sharp eye for pacing, storytelling, and visual impact. I turn raw footage into compelling content that holds attention and drives results.</p>
-            <p>Whether it's a cinematic brand film, a high-CTR YouTube video, a punchy ad creative, or a viral short-form reel — I bring the same obsession with quality to every frame.</p>
-            <p>I work with creators, brands, and agencies across YouTube, Instagram, TikTok, and paid media — helping them build audiences and generate revenue through video.</p>
-            <div class="tools-grid">
-                <div class="tool-chip">Premiere Pro</div>
-                <div class="tool-chip">After Effects</div>
-                <div class="tool-chip">DaVinci Resolve</div>
-                <div class="tool-chip">CapCut</div>
-                <div class="tool-chip">Photoshop</div>
-                <div class="tool-chip">Final Cut Pro</div>
-            </div>
-        </div>
-        <div class="about-image-side">
-            <div class="about-img-frame">
-                <img src="https://i.postimg.cc/W1V08d8h/IMG-20260128-WA0017(1).jpg" alt="George Waris">
-            </div>
-            <div class="about-img-accent">
-                <div class="n">4+</div>
-                <div class="l">Years<br>Editing</div>
-            </div>
-        </div>
+<!-- WORK -->
+<section class="work" id="work">
+  <div class="work-header reveal">
+    <div>
+      <div class="sec-label" style="margin-bottom:16px;">Selected Work</div>
+      <h2 class="sec-title">The <em>Reel</em></h2>
     </div>
+    <div class="filter-tabs">
+      <button class="ftab on">All</button>
+      <button class="ftab">YouTube</button>
+      <button class="ftab">Ads</button>
+      <button class="ftab">Short-Form</button>
+      <button class="ftab">Cinematic</button>
+    </div>
+  </div>
+
+  <div class="vgrid">
+
+    <a href="https://jumpshare.com/share/twRXg5MoT7NPXt1nZLQI" target="_blank" class="vcard vc-a reveal" data-cat="ads">
+      <div class="vcard-thumb">
+        <img class="vcard-img" src="https://previews.jumpshare.com/thumb/8347537cc507cff07a90f5a5803f8e5e68102b58648ba8d8c44dc6f1f82f45527f121d71548cd4ff48c68f70541d6262f601c4f9d00a3d9f7f5bd8e2123ccaed4109dc837e9110b015d63cac06fa2a5c" alt="Logo Won't Make You Billions" loading="lazy">
+        <div class="vcard-shape"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" stroke="white" stroke-width="1" fill="none"/><line x1="50" y1="2" x2="50" y2="98" stroke="white" stroke-width=".5"/><line x1="2" y1="50" x2="98" y2="50" stroke="white" stroke-width=".5"/></svg></div>
+      </div>
+      <div class="vcard-play"></div>
+      <div class="vcard-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7,7 17,7 17,17"/></svg></div>
+      <div class="vcard-body">
+        <div class="vcard-tag">Short-Form · Ad Creative</div>
+        <div class="vcard-name">Your Logo Won't Make You Billions</div>
+        <div class="vcard-dur">1 min 58 sec</div>
+      </div>
+    </a>
+
+    <a href="https://jumpshare.com/share/4reqMqqvRcZOYo2TxQwJ" target="_blank" class="vcard vc-b reveal" data-cat="youtube">
+      <div class="vcard-thumb">
+        <img class="vcard-img" src="https://previews.jumpshare.com/thumb/8347537cc507cff07a90f5a5803f8e5e319b3dee96473c673e857d4610809e44a511e35b8b71ba7f822114d8ef576248b15d137cafa728ddacd115515e527ec13fd6e91a58cbf467833c137542dd4e67" alt="Brand Strategy" loading="lazy">
+        <div class="vcard-shape"><svg viewBox="0 0 100 100"><rect x="10" y="10" width="80" height="80" stroke="white" stroke-width=".8" fill="none"/><rect x="25" y="25" width="50" height="50" stroke="white" stroke-width=".5" fill="none"/></svg></div>
+      </div>
+      <div class="vcard-play"></div>
+      <div class="vcard-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7,7 17,7 17,17"/></svg></div>
+      <div class="vcard-body">
+        <div class="vcard-tag">YouTube · Content</div>
+        <div class="vcard-name">Why You Need a Brand Strategy</div>
+        <div class="vcard-dur">1 min</div>
+      </div>
+    </a>
+
+    <a href="https://jumpshare.com/share/s7FLY1ovEjB8Rx7LWhGs" target="_blank" class="vcard vc-c reveal" data-cat="short">
+      <div class="vcard-thumb"><div class="vcard-shape"><svg viewBox="0 0 100 100"><polygon points="50,5 95,25 95,75 50,95 5,75 5,25" stroke="white" stroke-width=".8" fill="none"/></svg></div></div>
+      <div class="vcard-play"></div>
+      <div class="vcard-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7,7 17,7 17,17"/></svg></div>
+      <div class="vcard-body"><div class="vcard-tag">Short-Form · Reel</div><div class="vcard-name">Project 03</div></div>
+    </a>
+
+    <a href="https://jumpshare.com/share/olSUlhjUOHj7wcZqupEH" target="_blank" class="vcard vc-d reveal" data-cat="cinematic">
+      <div class="vcard-thumb"><div class="vcard-shape"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" stroke="white" stroke-width=".8" fill="none"/><circle cx="50" cy="50" r="20" stroke="white" stroke-width=".5" fill="none"/><circle cx="50" cy="50" r="5" fill="white" opacity=".3"/></svg></div></div>
+      <div class="vcard-play"></div>
+      <div class="vcard-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7,7 17,7 17,17"/></svg></div>
+      <div class="vcard-body"><div class="vcard-tag">Cinematic · Brand Film</div><div class="vcard-name">Project 04</div></div>
+    </a>
+
+    <a href="https://jumpshare.com/share/ifakMCYC2JpmZNqUTZeh" target="_blank" class="vcard vc-e reveal" data-cat="youtube">
+      <div class="vcard-thumb"><div class="vcard-shape"><svg viewBox="0 0 100 100"><line x1="0" y1="100" x2="100" y2="0" stroke="white" stroke-width=".8"/><line x1="0" y1="75" x2="75" y2="0" stroke="white" stroke-width=".5"/><line x1="0" y1="50" x2="50" y2="0" stroke="white" stroke-width=".4"/></svg></div></div>
+      <div class="vcard-play"></div>
+      <div class="vcard-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7,7 17,7 17,17"/></svg></div>
+      <div class="vcard-body"><div class="vcard-tag">YouTube · Content</div><div class="vcard-name">Project 05</div></div>
+    </a>
+
+    <a href="https://jumpshare.com/share/JwA12uaIE9NowLeKlbLj" target="_blank" class="vcard vc-f reveal" data-cat="ads">
+      <div class="vcard-thumb"><div class="vcard-shape"><svg viewBox="0 0 100 100"><path d="M10,90 L50,10 L90,90 Z" stroke="white" stroke-width=".8" fill="none"/><path d="M25,90 L50,40 L75,90 Z" stroke="white" stroke-width=".5" fill="none"/></svg></div></div>
+      <div class="vcard-play"></div>
+      <div class="vcard-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7,7 17,7 17,17"/></svg></div>
+      <div class="vcard-body"><div class="vcard-tag">Ads · Commercial</div><div class="vcard-name">Project 06</div></div>
+    </a>
+
+    <a href="https://jumpshare.com/share/u7uZpVsmnoi2jyo7RCGH" target="_blank" class="vcard vc-g reveal" data-cat="short">
+      <div class="vcard-thumb"><div class="vcard-shape"><svg viewBox="0 0 100 100"><ellipse cx="50" cy="50" rx="45" ry="25" stroke="white" stroke-width=".8" fill="none"/><ellipse cx="50" cy="50" rx="25" ry="45" stroke="white" stroke-width=".5" fill="none"/></svg></div></div>
+      <div class="vcard-play"></div>
+      <div class="vcard-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7,7 17,7 17,17"/></svg></div>
+      <div class="vcard-body"><div class="vcard-tag">TikTok · Short-Form</div><div class="vcard-name">Project 07</div></div>
+    </a>
+
+    <a href="https://jumpshare.com/share/GtMQxs192aE703lVQTNY" target="_blank" class="vcard vc-h reveal" data-cat="cinematic">
+      <div class="vcard-thumb"><div class="vcard-shape"><svg viewBox="0 0 100 100"><path d="M50,5 A45,45 0 0,1 95,50 A45,45 0 0,1 50,95 A45,45 0 0,1 5,50 A45,45 0 0,1 50,5 Z" stroke="white" stroke-width=".8" fill="none"/></svg></div></div>
+      <div class="vcard-play"></div>
+      <div class="vcard-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7,7 17,7 17,17"/></svg></div>
+      <div class="vcard-body"><div class="vcard-tag">Cinematic · Film</div><div class="vcard-name">Project 08</div></div>
+    </a>
+
+    <a href="https://jumpshare.com/share/W568HvnXLM6omNDasWfd" target="_blank" class="vcard vc-i reveal" data-cat="youtube">
+      <div class="vcard-thumb"><div class="vcard-shape"><svg viewBox="0 0 100 100"><line x1="10" y1="10" x2="90" y2="90" stroke="white" stroke-width=".8"/><line x1="90" y1="10" x2="10" y2="90" stroke="white" stroke-width=".8"/><rect x="30" y="30" width="40" height="40" stroke="white" stroke-width=".5" fill="none"/></svg></div></div>
+      <div class="vcard-play"></div>
+      <div class="vcard-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7,7 17,7 17,17"/></svg></div>
+      <div class="vcard-body"><div class="vcard-tag">YouTube · Brand</div><div class="vcard-name">Project 09</div></div>
+    </a>
+
+    <a href="https://jumpshare.com/share/AkxPsAGxs5FLMARoHJsy" target="_blank" class="vcard vc-j reveal" data-cat="ads">
+      <div class="vcard-thumb"><div class="vcard-shape"><svg viewBox="0 0 100 100"><path d="M5,50 Q25,5 50,50 Q75,95 95,50" stroke="white" stroke-width=".8" fill="none"/><path d="M5,50 Q25,95 50,50 Q75,5 95,50" stroke="white" stroke-width=".5" fill="none"/></svg></div></div>
+      <div class="vcard-play"></div>
+      <div class="vcard-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7,7 17,7 17,17"/></svg></div>
+      <div class="vcard-body"><div class="vcard-tag">Ads · Short-Form</div><div class="vcard-name">Project 10</div></div>
+    </a>
+
+    <a href="https://jumpshare.com/share/yFIfoprRqzrpNeN8Sr1g" target="_blank" class="vcard vc-k reveal" data-cat="cinematic">
+      <div class="vcard-thumb"><div class="vcard-shape"><svg viewBox="0 0 100 100"><polygon points="50,10 80,35 80,65 50,90 20,65 20,35" stroke="white" stroke-width=".8" fill="none"/><line x1="50" y1="10" x2="50" y2="90" stroke="white" stroke-width=".4"/></svg></div></div>
+      <div class="vcard-play"></div>
+      <div class="vcard-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7,7 17,7 17,17"/></svg></div>
+      <div class="vcard-body"><div class="vcard-tag">Cinematic · Reel</div><div class="vcard-name">Project 11</div></div>
+    </a>
+
+  </div>
 </section>
 
-<section id="testimonials">
-    <div class="section-label">Client Reviews</div>
-    <h2 class="section-title">What clients<br><em style="font-style:italic;color:var(--accent)">say.</em></h2>
-    <div class="testimonials-grid">
-        <div class="testi-card fade-up">
-            <div class="testi-quote">"</div>
-            <p class="testi-text">George delivered exactly what we needed — clean cuts, perfect pacing, and edits that kept our audience watching all the way through. Our watch time went up 40% on the first video.</p>
-            <div class="testi-author">
-                <div class="testi-avatar">A</div>
-                <div><div class="testi-name">Alex M.</div><div class="testi-role">YouTube Creator · 500K Subs</div></div>
-            </div>
-        </div>
-        <div class="testi-card fade-up">
-            <div class="testi-quote">"</div>
-            <p class="testi-text">We hired George for our ad creatives and the results were immediate. His understanding of hooks and retention is exceptional — our ROAS doubled on the new creatives.</p>
-            <div class="testi-author">
-                <div class="testi-avatar">S</div>
-                <div><div class="testi-name">Sara L.</div><div class="testi-role">eCommerce Brand · Marketing Lead</div></div>
-            </div>
-        </div>
-        <div class="testi-card fade-up">
-            <div class="testi-quote">"</div>
-            <p class="testi-text">The cinematic reel George put together for our agency was stunning. Professional, creative, delivered on time. He's the only editor I'll be using going forward.</p>
-            <div class="testi-author">
-                <div class="testi-avatar">D</div>
-                <div><div class="testi-name">Daniel O.</div><div class="testi-role">Creative Agency · Founder</div></div>
-            </div>
-        </div>
+<!-- TESTIMONIALS -->
+<section class="sec testi" id="testimonials">
+  <div class="sec-label">Client Love</div>
+  <h2 class="sec-title">What they<br><em>say.</em></h2>
+  <div class="testi-grid">
+    <div class="tcard reveal">
+      <div class="tcard-quote">"</div>
+      <div class="tcard-stars">★★★★★</div>
+      <p class="tcard-text">"George completely transformed our YouTube channel. The pacing, transitions, and storytelling are next-level — watch time jumped 60% after the very first video."</p>
+      <div class="tcard-author"><div class="tcard-avatar">JK</div><div><div class="tcard-name">James K.</div><div class="tcard-role">YouTube Creator · 200K Subscribers</div></div></div>
     </div>
+    <div class="tcard reveal">
+      <div class="tcard-quote">"</div>
+      <div class="tcard-stars">★★★★★</div>
+      <p class="tcard-text">"Our TikTok ad hit 1.2M views organically. George understands the hook formula and algorithm mechanics better than anyone we've ever worked with."</p>
+      <div class="tcard-author"><div class="tcard-avatar">SA</div><div><div class="tcard-name">Sofia A.</div><div class="tcard-role">Founder · DTC Beauty Brand</div></div></div>
+    </div>
+    <div class="tcard reveal">
+      <div class="tcard-quote">"</div>
+      <div class="tcard-stars">★★★★★</div>
+      <p class="tcard-text">"Cinematic quality on a tight deadline. George delivered a brand film in 3 days that our agency would've taken 3 weeks to produce. Absolutely brilliant."</p>
+      <div class="tcard-author"><div class="tcard-avatar">ML</div><div><div class="tcard-name">Marcus L.</div><div class="tcard-role">Creative Director · Ad Agency</div></div></div>
+    </div>
+  </div>
 </section>
 
-<section id="contact">
-    <div class="contact-inner">
-        <div class="contact-left">
-            <div class="section-label">Get in Touch</div>
-            <h2 class="section-title">Ready to<br><em style="font-style:italic;color:var(--accent)">create?</em></h2>
-            <p>I'm available for YouTube channels, brand films, ad creatives, short-form content, and ongoing retainer partnerships.</p>
-            <div class="availability-badge"><div class="avail-dot"></div>Available for new projects</div>
-            <div class="contact-links">
-                <a href="mailto:Georgetown98000@gmail.com" class="contact-link">
-                    <div class="contact-link-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
-                    Georgetown98000@gmail.com
-                </a>
-                <a href="tel:+2349030323036" class="contact-link">
-                    <div class="contact-link-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91A16 16 0 0 0 14 15.91l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
-                    +234 903 032 3036
-                </a>
-                <a href="https://x.com/georgetown98000" target="_blank" class="contact-link">
-                    <div class="contact-link-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></div>
-                    @georgetown98000
-                </a>
-            </div>
-        </div>
-        <div class="contact-right">
-            <div class="contact-stat-block"><div class="contact-stat-num">24hr</div><div class="contact-stat-label">Average Response Time</div></div>
-            <div class="contact-stat-block"><div class="contact-stat-num">50+</div><div class="contact-stat-label">Videos Edited &amp; Delivered</div></div>
-            <div class="contact-stat-block"><div class="contact-stat-num">100%</div><div class="contact-stat-label">Client Satisfaction Rate</div></div>
-        </div>
+<!-- ABOUT -->
+<section class="sec about" id="about">
+  <div>
+    <div class="sec-label">The Editor</div>
+    <h2 class="sec-title about-title">Cut with<br><em>purpose.</em></h2>
+    <p>Hi, I'm <strong>George Waris</strong> — a video editor obsessed with the craft of visual storytelling. I don't just cut clips; I engineer emotion, guide attention, and build narratives that move people to act.</p>
+    <p>From high-retention YouTube edits to cinematic brand films and scroll-stopping ads — I bring both technical precision and creative vision to every single frame.</p>
+    <div class="tools">
+      <span class="tool">Premiere Pro</span>
+      <span class="tool">After Effects</span>
+      <span class="tool">DaVinci Resolve</span>
+      <span class="tool">CapCut</span>
+      <span class="tool">Color Grading</span>
+      <span class="tool">Motion Graphics</span>
+      <span class="tool">Sound Design</span>
+      <span class="tool">YouTube SEO</span>
     </div>
+  </div>
+  <div class="about-stats-grid reveal">
+    <div class="astat"><div class="astat-n">150<sup>+</sup></div><div class="astat-l">Projects Delivered</div></div>
+    <div class="astat"><div class="astat-n">4M<sup>+</sup></div><div class="astat-l">Views Generated</div></div>
+    <div class="astat"><div class="astat-n">48<sup>h</sup></div><div class="astat-l">Avg. Turnaround</div></div>
+    <div class="astat"><div class="astat-n">100<sup>%</sup></div><div class="astat-l">Client Satisfaction</div></div>
+  </div>
 </section>
 
+<!-- CONTACT -->
+<div class="contact-wrap" id="contact">
+  <div class="sec-label" style="justify-content:center;margin-bottom:40px;">Let's Work</div>
+  <h2 class="contact-title">
+    Let's make<br>
+    <em>something</em><br>
+    <span class="ghost">great.</span>
+  </h2>
+  <p class="contact-sub">Available for freelance projects, retainers, and agency partnerships. Drop me a line.</p>
+  <div class="contact-links">
+    <a href="mailto:Georgetown98000@gmail.com" class="contact-email">Georgetown98000@gmail.com</a>
+    <span class="sep">·</span>
+    <a href="tel:+2349030323036" class="contact-phone">+234 903 032 3036</a>
+  </div>
+  <div class="contact-social">
+    <a href="https://x.com/georgetown98000" target="_blank" class="soc-link">X / Twitter</a>
+    <a href="mailto:Georgetown98000@gmail.com" class="soc-link">Email</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
 <footer>
-    <div class="footer-logo">George<span>Waris</span></div>
-    <div class="footer-copy">&#169; 2025 George Waris &middot; Video Editor</div>
+  <div class="flogo">George<span>Waris</span></div>
+  <p>Video Editor &amp; Motion Artist © 2025</p>
 </footer>
 
 <script>
-    const cursor = document.getElementById('cursor');
-    const ring = document.getElementById('cursorRing');
-    let mx=0,my=0,rx=0,ry=0;
-    document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=(mx-6)+'px';cursor.style.top=(my-6)+'px';});
-    function animRing(){rx+=(mx-rx-19)*0.12;ry+=(my-ry-19)*0.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing);}
-    animRing();
-    document.querySelectorAll('a,button,.work-card').forEach(el=>{
-        el.addEventListener('mouseenter',()=>{cursor.style.transform='scale(2.5)';ring.style.borderColor='rgba(232,93,38,0.9)';});
-        el.addEventListener('mouseleave',()=>{cursor.style.transform='scale(1)';ring.style.borderColor='rgba(232,93,38,0.5)';});
+/* Cursor */
+const cur = document.getElementById('cur');
+const trail = document.getElementById('cur-trail');
+let mx=0,my=0,tx=0,ty=0;
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX; my=e.clientY;
+  cur.style.transform=`translate(${mx-4}px,${my-4}px)`;
+});
+(function loop(){
+  tx+=(mx-tx)*.14; ty+=(my-ty)*.14;
+  trail.style.transform=`translate(${tx-18}px,${ty-18}px)`;
+  requestAnimationFrame(loop);
+})();
+document.querySelectorAll('a,button').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{ trail.style.width='56px'; trail.style.height='56px'; });
+  el.addEventListener('mouseleave',()=>{ trail.style.width='36px'; trail.style.height='36px'; });
+});
+
+/* Scroll reveal */
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach((e,i)=>{
+    if(e.isIntersecting){ setTimeout(()=>e.target.classList.add('in'),i*55); obs.unobserve(e.target); }
+  });
+},{threshold:0.08});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+/* Filter tabs */
+document.querySelectorAll('.ftab').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.ftab').forEach(b=>b.classList.remove('on'));
+    btn.classList.add('on');
+    const cat=btn.textContent.trim().toLowerCase();
+    document.querySelectorAll('.vcard').forEach(c=>{
+      if(cat==='all'){ c.style.opacity='1'; c.style.pointerEvents='auto'; return; }
+      const d=(c.dataset.cat||'').toLowerCase();
+      const match=(cat==='youtube'&&d==='youtube')||(cat==='ads'&&d==='ads')||(cat==='short-form'&&d==='short')||(cat==='cinematic'&&d==='cinematic');
+      c.style.opacity=match?'1':'0.12';
+      c.style.pointerEvents=match?'auto':'none';
     });
-    const obs=new IntersectionObserver(entries=>{entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('visible'),i*120);});},{threshold:0.1});
-    document.querySelectorAll('.fade-up').forEach(el=>obs.observe(el));
+  });
+});
 </script>
 </body>
 </html>
