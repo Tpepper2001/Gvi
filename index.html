@@ -28,7 +28,7 @@
             color: var(--offwhite);
             font-family: 'DM Sans', sans-serif;
             overflow-x: hidden;
-            cursor: none; /* Custom cursor */
+            cursor: none;
             -webkit-font-smoothing: antialiased;
         }
 
@@ -51,8 +51,9 @@
             transform: translate(-50%,-50%);
             transition: border-color .3s, width .25s var(--ease), height .25s var(--ease);
         }
-        .cursor.hover { width: 40px; height: 40px; background: var(--accent); opacity: 0.3; mix-blend-mode: exclusion; }
-        .cursor-ring.hover { width: 60px; height: 60px; border-color: var(--accent); border-width: 1px; }
+        .cursor.hover { width: 60px; height: 60px; background: var(--accent); opacity: 0.15; mix-blend-mode: normal; }
+        .cursor.hover::after { content: 'VIEW'; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-family: 'Space Mono'; font-size: 10px; color: white; font-weight: bold; letter-spacing: 1px;}
+        .cursor-ring.hover { width: 80px; height: 80px; border-color: var(--accent); border-width: 1px; }
 
         /* ─── Noise overlay ───────────────────────── */
         .noise-overlay {
@@ -116,23 +117,9 @@
         }
         .nav-cta:hover { background: var(--offwhite); transform: translateY(-2px); }
 
-        /* Hamburger */
-        .hamburger {
-            display: none; flex-direction: column; gap: 6px; cursor: none; z-index: 201; border: none; background: none;
-        }
+        .hamburger { display: none; flex-direction: column; gap: 6px; cursor: pointer; z-index: 201; border: none; background: none; }
         .hamburger span { display: block; width: 26px; height: 1.5px; background: var(--offwhite); transition: .3s; }
-        .hamburger.open span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
-        .hamburger.open span:nth-child(2) { opacity: 0; }
-        .hamburger.open span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
-
-        .mobile-menu {
-            position: fixed; inset: 0; background: var(--black); z-index: 199;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            gap: 32px; opacity: 0; pointer-events: none; transition: .4s;
-        }
-        .mobile-menu.open { opacity: 1; pointer-events: all; }
-        .mobile-menu a { font-family: 'DM Serif Display', serif; font-size: 2.5rem; color: var(--offwhite); text-decoration: none; }
-
+        
         /* ─── HERO ────────────────────────────────── */
         .hero {
             min-height: 100vh;
@@ -142,8 +129,8 @@
         }
         .hero-bg {
             position: absolute; inset: 0;
-            background: radial-gradient(circle at 20% 30%, rgba(232,93,38,0.15) 0%, transparent 40%),
-                        radial-gradient(circle at 80% 70%, rgba(232,93,38,0.08) 0%, transparent 40%);
+            background: radial-gradient(circle at 20% 30%, rgba(232,93,38,0.1) 0%, transparent 40%),
+                        radial-gradient(circle at 80% 70%, rgba(232,93,38,0.05) 0%, transparent 40%);
             z-index: -1;
         }
 
@@ -173,12 +160,11 @@
         .hero-stats { display: flex; gap: 60px; border-left: 1px solid var(--border); padding-left: 60px; }
         .stat-number { font-family: 'DM Serif Display', serif; font-size: 3rem; line-height: 1; }
         .stat-label { font-family: 'Space Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--muted); margin-top: 8px; }
-        .stat-sup { color: var(--accent); vertical-align: super; font-size: 1.2rem; }
 
         @keyframes reveal { to { opacity: 1; transform: translateY(0); } }
 
         /* ─── WORK GRID ───────────────────────────── */
-        #work { background: var(--black); padding-top: 120px; }
+        #work { background: var(--black); padding: 120px 52px; }
         
         .work-header {
             display: flex; justify-content: space-between; align-items: flex-end;
@@ -190,39 +176,50 @@
             background: none; border: 1px solid var(--border);
             color: var(--muted); padding: 10px 20px; font-family: 'Space Mono', monospace;
             font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em;
-            cursor: none; transition: .3s;
+            cursor: pointer; transition: .3s;
         }
         .filter-btn.active, .filter-btn:hover { border-color: var(--accent); color: var(--offwhite); background: rgba(232,93,38,0.1); }
 
         .js-grid {
-            display: grid; grid-template-columns: repeat(6, 1fr); gap: 15px;
+            display: grid; grid-template-columns: repeat(6, 1fr); gap: 20px;
         }
         .js-card {
             grid-column: span 2; position: relative; aspect-ratio: 16/10;
             overflow: hidden; text-decoration: none; background: #111;
             transition: transform .6s var(--ease), opacity .4s;
+            border: 1px solid var(--border);
         }
-        .js-card.featured { grid-column: span 4; }
+        .js-card.featured { grid-column: span 3; aspect-ratio: 16/11; }
+        .js-card.portrait { grid-column: span 2; aspect-ratio: 9/16; }
         .js-card.hidden { display: none; }
         
-        .js-card img { width: 100%; height: 100%; object-fit: cover; transition: .8s var(--ease); filter: grayscale(0.2) brightness(0.8); }
+        .js-card img { width: 100%; height: 100%; object-fit: cover; transition: .8s var(--ease); filter: grayscale(0.4) brightness(0.7); }
         .js-card:hover img { transform: scale(1.05); filter: grayscale(0) brightness(0.5); }
 
         .js-card-overlay {
             position: absolute; inset: 0; padding: 30px;
             display: flex; flex-direction: column; justify-content: flex-end;
-            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 60%);
+            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 60%);
             opacity: 0; transition: .4s;
         }
         .js-card:hover .js-card-overlay { opacity: 1; }
         .js-card-tag { font-family: 'Space Mono', monospace; font-size: 0.6rem; color: var(--accent); text-transform: uppercase; margin-bottom: 8px; }
-        .js-card-title { font-family: 'DM Serif Display', serif; font-size: 1.5rem; }
+        .js-card-title { font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: white; line-height: 1.2; }
+
+        .play-icon {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 50px; height: 50px; background: var(--accent); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; transition: .4s;
+        }
+        .js-card:hover .play-icon { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+        .play-icon svg { width: 20px; fill: white; margin-left: 3px; }
 
         /* ─── ABOUT ───────────────────────────────── */
         #about { background: var(--offwhite); color: var(--black); padding: 140px 52px; }
         .about-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 100px; align-items: center; }
         .about-image { position: relative; width: 100%; }
-        .about-image img { width: 100%; aspect-ratio: 4/5; object-fit: cover; filter: sepia(0.2); }
+        .about-image img { width: 100%; aspect-ratio: 4/5; object-fit: cover; filter: sepia(0.1); }
         .about-badge {
             position: absolute; bottom: -30px; right: -30px;
             background: var(--accent); color: white; padding: 40px;
@@ -244,16 +241,11 @@
         }
         .big-mail:hover { color: var(--accent); }
 
-        /* ─── UTILS ───────────────────────────────── */
-        .fade-up { opacity: 0; transform: translateY(40px); transition: all 0.8s var(--ease); }
-        .fade-up.visible { opacity: 1; transform: translateY(0); }
-
         /* ─── RESPONSIVE ──────────────────────────── */
-        @media (max-width: 1024px) {
+        @media (max-width: 1100px) {
             .js-grid { grid-template-columns: repeat(4, 1fr); }
-            .hero-sub-row { grid-template-columns: 1fr; }
-            .hero-stats { border-left: none; padding-left: 0; border-top: 1px solid var(--border); padding-top: 40px; }
-            .about-grid { grid-template-columns: 1fr; }
+            .js-card.featured { grid-column: span 2; }
+            .about-grid { grid-template-columns: 1fr; gap: 60px; }
         }
         @media (max-width: 768px) {
             nav { padding: 20px; }
@@ -261,11 +253,13 @@
             .hamburger { display: flex; }
             .hero { padding: 20px; }
             .js-grid { grid-template-columns: 1fr; }
-            .js-card, .js-card.featured { grid-column: span 1; }
-            .contact-container { grid-template-columns: 1fr; }
+            .js-card, .js-card.featured, .js-card.portrait { grid-column: span 1; aspect-ratio: 16/10; }
             body { cursor: auto; }
             .cursor, .cursor-ring { display: none; }
         }
+
+        .fade-up { opacity: 0; transform: translateY(40px); transition: all 0.8s var(--ease); }
+        .fade-up.visible { opacity: 1; transform: translateY(0); }
     </style>
 </head>
 <body>
@@ -287,12 +281,6 @@
     </button>
 </nav>
 
-<div class="mobile-menu" id="mobileMenu">
-    <a href="#work" onclick="toggleMenu()">Work</a>
-    <a href="#about" onclick="toggleMenu()">About</a>
-    <a href="#contact" onclick="toggleMenu()">Contact</a>
-</div>
-
 <header class="hero">
     <div class="hero-bg"></div>
     <div class="hero-content">
@@ -302,12 +290,12 @@
             <p class="hero-desc">I help creators and brands dominate attention through cinematic editing, psychological pacing, and high-end motion design.</p>
             <div class="hero-stats">
                 <div class="stat-item">
-                    <div class="stat-number" data-target="50">0<span class="stat-sup">+</span></div>
-                    <div class="stat-label">Projects</div>
+                    <div class="stat-number" data-target="150">0<span>+</span></div>
+                    <div class="stat-label">Projects Completed</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-number" data-target="4">0<span class="stat-sup">yr</span></div>
-                    <div class="stat-label">Experience</div>
+                    <div class="stat-number" data-target="4">0<span>+</span></div>
+                    <div class="stat-label">Years Experience</div>
                 </div>
             </div>
         </div>
@@ -315,46 +303,129 @@
 </header>
 
 <section id="work">
-    <div style="padding: 0 52px;">
-        <div class="work-header fade-up">
-            <div>
-                <div class="hero-eyebrow" style="margin-bottom: 10px;">Portfolio</div>
-                <h2 style="font-family:'DM Serif Display'; font-size: 3rem;">Selected Works</h2>
-            </div>
-            <div class="work-filter">
-                <button class="filter-btn active" data-filter="all">All</button>
-                <button class="filter-btn" data-filter="youtube">YouTube</button>
-                <button class="filter-btn" data-filter="ads">Ads</button>
-                <button class="filter-btn" data-filter="shortform">Shorts</button>
-            </div>
+    <div class="work-header fade-up">
+        <div>
+            <div class="hero-eyebrow" style="margin-bottom: 10px;">Portfolio</div>
+            <h2 style="font-family:'DM Serif Display'; font-size: clamp(2rem, 5vw, 3.5rem);">Selected Works</h2>
         </div>
+        <div class="work-filter">
+            <button class="filter-btn active" data-filter="all">All Projects</button>
+            <button class="filter-btn" data-filter="youtube">YouTube</button>
+            <button class="filter-btn" data-filter="shortform">Shorts/Reels</button>
+            <button class="filter-btn" data-filter="ads">Ads</button>
+        </div>
+    </div>
 
-        <div class="js-grid">
-            <!-- Project 1 -->
-            <a href="#" class="js-card featured fade-up" data-cat="youtube">
-                <img src="https://images.unsplash.com/photo-1536244636800-a3f74db0f3cf?auto=format&fit=crop&w=1200" alt="Work">
-                <div class="js-card-overlay">
-                    <div class="js-card-tag">YouTube · Documentary</div>
-                    <div class="js-card-title">The Evolution of Digital Art</div>
-                </div>
-            </a>
-            <!-- Project 2 -->
-            <a href="#" class="js-card fade-up" data-cat="shortform">
-                <img src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=800" alt="Work">
-                <div class="js-card-overlay">
-                    <div class="js-card-tag">Shortform · Viral</div>
-                    <div class="js-card-title">TikTok Growth Hooks</div>
-                </div>
-            </a>
-            <!-- Project 3 -->
-            <a href="#" class="js-card fade-up" data-cat="ads">
-                <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800" alt="Work">
-                <div class="js-card-overlay">
-                    <div class="js-card-tag">Paid Media · Ad</div>
-                    <div class="js-card-title">SaaS Product Launch</div>
-                </div>
-            </a>
-        </div>
+    <div class="js-grid">
+        <!-- Project 1 -->
+        <a href="https://jumpshare.com/share/twRXg5MoT7NPXt1nZLQI" target="_blank" class="js-card featured fade-up" data-cat="youtube">
+            <img src="https://images.unsplash.com/photo-1492691523567-6170c3295db6?auto=format&fit=crop&w=1000" alt="Work">
+            <div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <div class="js-card-overlay">
+                <div class="js-card-tag">YouTube · Storytelling</div>
+                <div class="js-card-title">Digital Narrative Evolution</div>
+            </div>
+        </a>
+
+        <!-- Project 2 -->
+        <a href="https://jumpshare.com/share/4reqMqqvRcZOYo2TxQwJ" target="_blank" class="js-card fade-up" data-cat="shortform">
+            <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800" alt="Work">
+            <div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <div class="js-card-overlay">
+                <div class="js-card-tag">Shortform · Hook Logic</div>
+                <div class="js-card-title">Viral Engagement Strategy</div>
+            </div>
+        </a>
+
+        <!-- Project 3 -->
+        <a href="https://jumpshare.com/share/s7FLY1ovEjB8Rx7LWhGs" target="_blank" class="js-card fade-up" data-cat="ads">
+            <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=800" alt="Work">
+            <div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <div class="js-card-overlay">
+                <div class="js-card-tag">Commercial · Ad</div>
+                <div class="js-card-title">High-Conversion Product Spot</div>
+            </div>
+        </a>
+
+        <!-- Project 4 -->
+        <a href="https://jumpshare.com/share/olSUlhjUOHj7wcZqupEH" target="_blank" class="js-card portrait fade-up" data-cat="shortform">
+            <img src="https://images.unsplash.com/photo-1616469829581-73993eb86b02?auto=format&fit=crop&w=800" alt="Work">
+            <div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <div class="js-card-overlay">
+                <div class="js-card-tag">Reels · Fast Paced</div>
+                <div class="js-card-title">Creator Content Loop</div>
+            </div>
+        </a>
+
+        <!-- Project 5 -->
+        <a href="https://jumpshare.com/share/ifakMCYC2JpmZNqUTZeh" target="_blank" class="js-card fade-up" data-cat="youtube">
+            <img src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=800" alt="Work">
+            <div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <div class="js-card-overlay">
+                <div class="js-card-tag">YouTube · Documentary</div>
+                <div class="js-card-title">Long-Form Pacing Study</div>
+            </div>
+        </a>
+
+        <!-- Project 6 -->
+        <a href="https://jumpshare.com/share/JwA12uaIE9NowLeKlbLj" target="_blank" class="js-card fade-up" data-cat="shortform">
+            <img src="https://images.unsplash.com/photo-1533750349088-cd871a92f312?auto=format&fit=crop&w=800" alt="Work">
+            <div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <div class="js-card-overlay">
+                <div class="js-card-tag">TikTok · Trends</div>
+                <div class="js-card-title">Modern Hook Masterclass</div>
+            </div>
+        </a>
+
+        <!-- Project 7 -->
+        <a href="https://jumpshare.com/share/u7uZpVsmnoi2yo7RCGH" target="_blank" class="js-card featured fade-up" data-cat="ads">
+            <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1000" alt="Work">
+            <div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <div class="js-card-overlay">
+                <div class="js-card-tag">SaaS · Motion Graphics</div>
+                <div class="js-card-title">Brand Identity Motion</div>
+            </div>
+        </a>
+
+        <!-- Project 8 -->
+        <a href="https://jumpshare.com/share/GtMQxs192aE703lVQTNY" target="_blank" class="js-card fade-up" data-cat="youtube">
+            <img src="https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?auto=format&fit=crop&w=800" alt="Work">
+            <div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <div class="js-card-overlay">
+                <div class="js-card-tag">YouTube · Lifestyle</div>
+                <div class="js-card-title">Cinematic Travel Story</div>
+            </div>
+        </a>
+
+        <!-- Project 9 -->
+        <a href="https://jumpshare.com/share/W568HvnXLM6omNDasWfd" target="_blank" class="js-card portrait fade-up" data-cat="shortform">
+            <img src="https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=800" alt="Work">
+            <div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <div class="js-card-overlay">
+                <div class="js-card-tag">Shortform · AI</div>
+                <div class="js-card-title">Tech Innovation Reels</div>
+            </div>
+        </a>
+
+        <!-- Project 10 -->
+        <a href="https://jumpshare.com/share/AkxPsAGxs5FLMARoHJsy" target="_blank" class="js-card fade-up" data-cat="youtube">
+            <img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=800" alt="Work">
+            <div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <div class="js-card-overlay">
+                <div class="js-card-tag">YouTube · Education</div>
+                <div class="js-card-title">Educational Pacing Study</div>
+            </div>
+        </a>
+
+        <!-- Project 11 -->
+        <a href="https://jumpshare.com/share/yFIfoprRqzrpNeN8Sr1g" target="_blank" class="js-card fade-up" data-cat="ads">
+            <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=800" alt="Work">
+            <div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <div class="js-card-overlay">
+                <div class="js-card-tag">Commercial · B2B</div>
+                <div class="js-card-title">Corporate Narrative Edit</div>
+            </div>
+        </a>
     </div>
 </section>
 
@@ -387,14 +458,14 @@
     <div class="contact-container">
         <div class="fade-up">
             <div class="hero-eyebrow">Contact</div>
-            <h2 style="font-family:'DM Serif Display'; font-size: 3.5rem; margin-bottom: 30px;">Let's make something<br><em>unforgettable.</em></h2>
+            <h2 style="font-family:'DM Serif Display'; font-size: clamp(2rem, 5vw, 3.5rem); margin-bottom: 30px;">Let's make something<br><em>unforgettable.</em></h2>
             <p style="color: var(--muted); margin-bottom: 40px;">Currently accepting new clients for 2025.</p>
             <a href="mailto:contact@georgewaris.com" class="big-mail">hello@georgewaris.com</a>
         </div>
         <div class="fade-up" style="display: flex; flex-direction: column; gap: 20px; justify-content: flex-end;">
             <div style="padding: 30px; border: 1px solid var(--border);">
                 <div style="color: var(--accent); font-family: 'Space Mono'; font-size: 0.7rem; margin-bottom: 10px;">TWITTER / X</div>
-                <a href="https://x.com/georgetown98000" style="color: white; text-decoration: none;">@georgetown98000</a>
+                <a href="https://x.com/georgetown98000" target="_blank" style="color: white; text-decoration: none;">@georgetown98000</a>
             </div>
             <div style="padding: 30px; border: 1px solid var(--border);">
                 <div style="color: var(--accent); font-family: 'Space Mono'; font-size: 0.7rem; margin-bottom: 10px;">WHATSAPP</div>
@@ -405,73 +476,48 @@
 </section>
 
 <footer style="padding: 50px; border-top: 1px solid var(--border); text-align: center; color: var(--muted); font-family: 'Space Mono'; font-size: 0.6rem;">
-    &copy; 2025 GEORGE WARIS · ALL RIGHTS RESERVED
+    &copy; 2025 GEORGE WARIS · VIDEO EDITOR & MOTION DESIGNER
 </footer>
 
 <script>
-    /* ─── Custom Cursor Logic ─── */
+    /* ─── Cursor Logic ─── */
     const cursor = document.getElementById('cursor');
     const ring = document.getElementById('cursorRing');
     let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
 
     document.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-        cursor.style.left = mouseX + 'px';
-        cursor.style.top = mouseY + 'px';
+        mouseX = e.clientX; mouseY = e.clientY;
+        cursor.style.left = mouseX + 'px'; cursor.style.top = mouseY + 'px';
     });
 
     function animateRing() {
-        ringX += (mouseX - ringX) * 0.15;
-        ringY += (mouseY - ringY) * 0.15;
-        ring.style.left = ringX + 'px';
-        ring.style.top = ringY + 'px';
+        ringX += (mouseX - ringX) * 0.15; ringY += (mouseY - ringY) * 0.15;
+        ring.style.left = ringX + 'px'; ring.style.top = ringY + 'px';
         requestAnimationFrame(animateRing);
     }
     animateRing();
 
-    document.querySelectorAll('a, button, .filter-btn, .js-card').forEach(item => {
-        item.addEventListener('mouseenter', () => {
-            cursor.classList.add('hover');
-            ring.classList.add('hover');
-        });
-        item.addEventListener('mouseleave', () => {
-            cursor.classList.remove('hover');
-            ring.classList.remove('hover');
-        });
+    document.querySelectorAll('a, button, .filter-btn').forEach(item => {
+        item.addEventListener('mouseenter', () => { cursor.classList.add('hover'); ring.classList.add('hover'); });
+        item.addEventListener('mouseleave', () => { cursor.classList.remove('hover'); ring.classList.remove('hover'); });
     });
 
-    /* ─── Navigation Scroll ─── */
+    /* ─── Nav Scroll ─── */
     window.addEventListener('scroll', () => {
-        const nav = document.getElementById('nav');
-        nav.classList.toggle('scrolled', window.scrollY > 50);
+        document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 50);
     });
 
-    /* ─── Mobile Menu ─── */
-    const hamburger = document.getElementById('hamburger');
-    const mobileMenu = document.getElementById('mobileMenu');
-    
-    function toggleMenu() {
-        hamburger.classList.toggle('open');
-        mobileMenu.classList.toggle('open');
-        document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
-    }
-    hamburger.addEventListener('click', toggleMenu);
-
-    /* ─── Scroll Reveal Observer ─── */
-    const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
+    /* ─── Observer ─── */
     const revealObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('visible');
-                revealObserver.unobserve(entry.target);
             }
         });
-    }, observerOptions);
-
+    }, { threshold: 0.1 });
     document.querySelectorAll('.fade-up').forEach(el => revealObserver.observe(el));
 
-    /* ─── Work Filtering ─── */
+    /* ─── Filter Logic ─── */
     const filterBtns = document.querySelectorAll('.filter-btn');
     const cards = document.querySelectorAll('.js-card');
 
@@ -479,59 +525,41 @@
         btn.addEventListener('click', () => {
             filterBtns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            
             const filterValue = btn.getAttribute('data-filter');
             
             cards.forEach(card => {
-                card.style.opacity = '0';
-                card.style.transform = 'scale(0.95)';
-                
-                setTimeout(() => {
-                    if (filterValue === 'all' || card.getAttribute('data-cat') === filterValue) {
-                        card.classList.remove('hidden');
-                        card.style.opacity = '1';
-                        card.style.transform = 'scale(1)';
-                    } else {
-                        card.classList.add('hidden');
-                    }
-                }, 300);
+                if (filterValue === 'all' || card.getAttribute('data-cat') === filterValue) {
+                    card.style.display = 'block';
+                    setTimeout(() => card.style.opacity = '1', 10);
+                } else {
+                    card.style.opacity = '0';
+                    setTimeout(() => card.style.display = 'none', 400);
+                }
             });
         });
     });
 
-    /* ─── Counter Animation ─── */
-    function animateCounters() {
-        const stats = document.querySelectorAll('.stat-number');
-        stats.forEach(stat => {
-            const target = +stat.getAttribute('data-target');
-            const suffix = stat.querySelector('.stat-sup').outerHTML;
-            let count = 0;
-            const speed = 2000 / target;
-
-            const updateCount = () => {
-                const inc = target / 100;
-                if (count < target) {
-                    count += inc;
-                    stat.innerHTML = Math.floor(count) + suffix;
-                    setTimeout(updateCount, speed);
-                } else {
-                    stat.innerHTML = target + suffix;
-                }
-            };
-            updateCount();
+    /* ─── Counter ─── */
+    const stats = document.querySelectorAll('.stat-number');
+    stats.forEach(stat => {
+        const target = +stat.getAttribute('data-target');
+        let count = 0;
+        const updateCount = () => {
+            const inc = target / 50;
+            if (count < target) {
+                count += inc;
+                stat.childNodes[0].nodeValue = Math.ceil(count);
+                setTimeout(updateCount, 40);
+            } else {
+                stat.childNodes[0].nodeValue = target;
+            }
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) { updateCount(); observer.unobserve(stat); }
         });
-    }
-
-    // Trigger counter when hero is visible
-    const heroContent = document.querySelector('.hero-content');
-    const counterObserver = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting) {
-            animateCounters();
-            counterObserver.unobserve(heroContent);
-        }
+        observer.observe(stat);
     });
-    counterObserver.observe(heroContent);
-
 </script>
 </body>
 </html>
